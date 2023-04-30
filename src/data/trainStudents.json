@@ -1,0 +1,99 @@
+{
+	"students":[
+		{
+			"studentId": "3242342352",
+			"semesters":[
+				{
+					"year": 2018,
+					"period": 2,
+					"courseGradeList":[
+					{
+						"courseName": "101531213 benekli baykus izleme",
+						"credit": 20,
+						"grade": 3.5
+					},
+									{
+						"courseName": "101531213 benekli baykus izleme",
+						"credit": 20,
+						"grade": 3.5
+					},
+									{
+						"courseName": "101531213 benekli baykus izleme",
+						"credit": 20,
+						"grade": 3.5
+					}
+					]
+				},
+							{
+					"year": 2018,
+					"period": 1,
+					"courseGradeList":[
+						{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						}
+					]
+				}
+			]
+		},
+		{
+			"studentId": "3242342352",
+			"semesters":[
+				{
+					"year": 2018,
+					"period": 2,
+					"courseGradeList":[
+						{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						}
+					]
+				},
+							{
+					"year": 2018,
+					"period": 1,
+					"courseGradeList":[
+						{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						},
+										{
+							"courseName": "101531213 benekli baykus izleme",
+							"credit": 20,
+							"grade": 3.5
+						}
+					]
+				}
+			]
+		}
+	]
+	
+}

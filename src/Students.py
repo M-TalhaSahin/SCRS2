@@ -13,6 +13,13 @@ class Students:
 
     @classmethod
     def loadFromJson(cls, fileName: str):
+
+        """
+        https://www.geeksforgeeks.org/what-is-a-clean-pythonic-way-to-have-multiple-constructors-in-python/
+
+        kullanırken
+        myStudents = Students.loadFromJson("file.json")
+        """
         pass
 
 
@@ -41,4 +48,4 @@ class Student:
 class Semester:
     def __init__(self, _period: (int, int)):
         self.period = _period
-        self.courseGradeList = []  # (str, int, float)
+        self.courseGradeList = []  # (name: str, credit: int, grade: float)
