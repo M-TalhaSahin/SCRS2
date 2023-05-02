@@ -2,7 +2,6 @@ import pandas as pd
 import csv
 from Students import Students
 
-
 class FileCreator:
     def __init__(self):
         self.hiddenCsvFileName = "hidden.csv"
@@ -53,12 +52,12 @@ class FileCreator:
         excel_data = pd.read_excel(brmOgrDersFileName, dtype=str)  # Read Excel data
         for index, row in excel_data.iterrows():
             if((row['YIL'])==str(testPeriod[0]) and (row['DONEM'])==str(testPeriod[1]) ):
-                sTrain = Students()
-                ders_kodu = row['DERS_KODU']
-                sTrain.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[ders_kodu]['kr']))
-            else:
                 sTest = Students()
-                sTest.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[row['DERS_KODU']]['kr']))
+                ders_kodu = row['DERS_KODU']
+                sTest.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[ders_kodu]['kr']))
+            else:
+                sTrain = Students()
+                sTrain.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[row['DERS_KODU']]['kr']))
 
 if __name__ == "__main__":
     import pprint

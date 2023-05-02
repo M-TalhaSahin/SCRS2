@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 class MarkovModel:
     def __init__(self, fileNames: dict):
         self.hiddenMatrix = pd.DataFrame()
