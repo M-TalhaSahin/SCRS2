@@ -1,5 +1,5 @@
 import pandas as pd
-
+import csv
 from Students import Students
 
 
@@ -23,17 +23,42 @@ class FileCreator:
         self.getStudentsObjects(brmOgrDersFileName, testPeriod, courseNameCreditDict)
 
     def getCourseList(self, brmDersFileName: str) -> dict:  # coursename, kredi
-        # self.courseListCsvFileName deki dosyaya yazdırılıcak
-        pass
+        excel_data = pd.read_excel(brmDersFileName, dtype=str)  # Read Excel data
+        # Get DERSKODU as unique key for courseList dictionary
+        courseList_dict = {}
+        with open("data/courseList.csv", mode="w", newline="", encoding='utf-8-sig') as dosya:
+            yazici = csv.writer(dosya)
+            yazici.writerow(['COURSENAME', 'KR', 'ZORSEC', 'TEMBIL', 'MESLEK', 'INSANB', 'TASARIM'])
+
+            for index, row in excel_data.iterrows():
+                lesson_code = row['DERS_KODU']
+                # Get values for each DERSKODU key
+                if lesson_code not in courseList_dict:
+                    courseList_dict[lesson_code] = {
+                        'ders_adi': row['DERSADI'],
+                        'kr': row['KR'],
+                        'zor_sec': row['ZORSEC'],
+                        'tem_bil': row['TEMBIL'],
+                        'meslek': row['MESLEK'],
+                        'genel': row['INSANB'],
+                        'tasarim': row['TASARIM']
+                    }
+                    yazici.writerow(
+                        [lesson_code + " " + row['DERSADI'], row['KR'], row['ZORSEC'], row['TEMBIL'], row['MESLEK'],
+                         row['INSANB'], row['TASARIM']])
+            dosya.close()
+        return courseList_dict  # return courseList as a dictionary
 
     def getStudentsObjects(self, brmOgrDersFileName: str, testPeriod: (int, int), courseNameCreditDict: dict):
-        sTrain = Students()
-        sTest = Students()
-        # sTrain.addSingleCourse(....)
-        # trainStudentsJsonFileName testStudentsJsonFileName deki dosyalar yazdırılıcak
-        sTrain.toJson(self.trainStudentsJsonFileName)
-        sTest.toJson(self.testStudentsJsonFileName)
-        pass
+        excel_data = pd.read_excel(brmOgrDersFileName, dtype=str)  # Read Excel data
+        for index, row in excel_data.iterrows():
+            if((row['YIL'])==str(testPeriod[0]) and (row['DONEM'])==str(testPeriod[1]) ):
+                sTrain = Students()
+                ders_kodu = row['DERS_KODU']
+                sTrain.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[ders_kodu]['kr']))
+            else:
+                sTest = Students()
+                sTest.addSingleCourse(row['OGRNO'],row['DERS_KODU'],testPeriod,float(row['SAYISAL']),int(courseNameCreditDict[row['DERS_KODU']]['kr']))
 
 if __name__ == "__main__":
     import pprint
