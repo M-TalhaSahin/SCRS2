@@ -1,3 +1,6 @@
+#resuorce files
+src/resuorces
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
