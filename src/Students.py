@@ -48,4 +48,4 @@ class Student:
 class Semester:
     def __init__(self, _period: (int, int)):
         self.period = _period
-        self.courseGradeList = []  # (name: str, credit: int, grade: float)
+        self.course_grade_list = []  # (name: str, credit: int, grade: float)

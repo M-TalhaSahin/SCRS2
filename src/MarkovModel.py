@@ -1,7 +1,6 @@
 import pandas as pd
 import math
 
-
 class MarkovModel:
     def __init__(self, fileNames: dict):
         self.hiddenMatrix = pd.read_csv('exh.csv', sep="\t", index_col=0, na_values=['NA']).fillna(0)
