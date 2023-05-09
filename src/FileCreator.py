@@ -101,6 +101,7 @@ class FileCreator:
         countMx = np.zeros((x, y))
 
         titleMx = np.zeros((4, 4))  # title size
+        countHiddenMx = np.zeros((4, 4))  # title counter
 
         for keyStu in sTrain.studentsDict.keys():
             keys = sTrain.studentsDict[keyStu].semesterDict.keys()
@@ -118,34 +119,39 @@ class FileCreator:
                                     passesMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += int(pass_val)
                                     countMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += 1
 
-                                    if pass_val:
-                                        s1Title = {}
-                                        s2Title = {}
 
-                                        s1Title["zor_sec"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['zor_sec']) else 0
-                                        s1Title["tembil"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tembil']) else 0
-                                        s1Title["meslek"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['meslek']) else 0
-                                        s1Title["tas"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tas']) else 0
+                                    s1Title = {}
+                                    s2Title = {}
 
-                                        kr = int(courseNamesDict[s2.split(' ')[0]]['kr'])
-                                        s2Title["zor_sec"] = courseNamesDict[s2.split(' ')[0]]['zor_sec']
-                                        s2Title["tembil"] = courseNamesDict[s2.split(' ')[0]]['tembil']
-                                        s2Title["meslek"] = courseNamesDict[s2.split(' ')[0]]['meslek']
-                                        s2Title["tas"] = courseNamesDict[s2.split(' ')[0]]['tas']
+                                    s1Title["zor_sec"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['zor_sec']) else 0
+                                    s1Title["tembil"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tembil']) else 0
+                                    s1Title["meslek"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['meslek']) else 0
+                                    s1Title["tas"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tas']) else 0
 
-                                        singlePoint = kr / (int(s2Title["zor_sec"]) + int(s2Title["tembil"]) + int(s2Title["meslek"]) + int(s2Title["tas"]))
+                                    kr = int(courseNamesDict[s2.split(' ')[0]]['kr'])
+                                    s2Title["zor_sec"] = courseNamesDict[s2.split(' ')[0]]['zor_sec']
+                                    s2Title["tembil"] = courseNamesDict[s2.split(' ')[0]]['tembil']
+                                    s2Title["meslek"] = courseNamesDict[s2.split(' ')[0]]['meslek']
+                                    s2Title["tas"] = courseNamesDict[s2.split(' ')[0]]['tas']
 
-                                        for f1 in s1Title.keys():
-                                            for f2 in s2Title.keys():
-                                                if int(s1Title[f1]) != 0 and int(s2Title[f2]) != 0:
-                                                    val = singlePoint * int(s2Title[f2])
-                                                    titleMx[hiddenIndex[f1]][hiddenIndex[f2]] += val
+                                    singlePoint = kr / (int(s2Title["zor_sec"]) + int(s2Title["tembil"]) + int(s2Title["meslek"]) + int(s2Title["tas"]))
+
+                                    for f1 in s1Title.keys():
+                                        for f2 in s2Title.keys():
+                                            if int(s1Title[f1]) != 0 and int(s2Title[f2]) != 0:
+                                                val = singlePoint * int(s2Title[f2])
+                                                titleMx[hiddenIndex[f1]][hiddenIndex[f2]] += val*pass_val
+                                                countHiddenMx[hiddenIndex[f1]][hiddenIndex[f2]] += 1
+
+
+
 
                                     #courseNamesDict[s1.split(' ')[0]][k]
                     nextKey = FileCreator.next2Period(key)
 
         print(1)
         finalMx = np.zeros((x, y))
+        finalHiddenMx = np.zeros((4, 4))
 
         for i in range(x):
             for j in range(y):
@@ -154,10 +160,17 @@ class FileCreator:
                 else:
                     finalMx[i][j] = passesMx[i][j] / countMx[i][j]
 
-        finalMx = FileCreator.normalizeMx(finalMx)
-        titleMx = FileCreator.normalizeMx(titleMx)
+        for i in range(4):
+            for j in range(4):
+                if countHiddenMx[i][j] == 0:
+                    finalHiddenMx[i][j] = -1
+                else:
+                    finalHiddenMx[i][j] = titleMx[i][j] / countHiddenMx[i][j]
 
-        df = pd.DataFrame(index=list(hiddenIndex.keys()), columns=list(hiddenIndex.keys()), data=titleMx)
+        finalMx = FileCreator.normalizeMx(finalMx)
+        finalHiddenMx = FileCreator.normalizeMx(finalHiddenMx)
+
+        df = pd.DataFrame(index=list(hiddenIndex.keys()), columns=list(hiddenIndex.keys()), data=finalHiddenMx)
         df.to_csv(self.hiddenCsvFileName, encoding='utf-8-sig')
 
         df = pd.DataFrame(index=cn, columns=ecn, data=finalMx)
