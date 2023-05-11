@@ -30,7 +30,7 @@ class FileCreator:
         electiveCourseList_dict = {}
         with open(self.courseListCsvFileName, mode="w", newline="", encoding='utf-8-sig') as dosya:
             yazici = csv.writer(dosya)
-            yazici.writerow(['COURSENAME', 'KR', 'ZORSEC', 'TEMBIL', 'MESLEK', 'INSANB', 'TASARIM'])
+            yazici.writerow(['COURSENAME', 'KR', 'zor_sec', 'tembil', 'meslek', 'insanb', 'tas'])
 
             for index, row in excel_data.iterrows():
                 lesson_code = row['DERS_KODU']
