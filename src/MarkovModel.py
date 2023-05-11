@@ -2,16 +2,15 @@ import pandas as pd
 import math
 
 class MarkovModel:
-    def __init__(self, fileNames: dict, _viterbiOff = True, _hiddenOff = True):
+    def __init__(self, fileNames: dict, _viterbiOff = False, _hiddenOff = False):
         self.viterbiOff = _viterbiOff
         self.hiddenOff = _hiddenOff
 
-        self.hiddenMatrix = pd.read_csv(fileNames['hiddenCsvFileName'], index_col=0, na_values=['NA']).fillna(0)
+        self.hiddenMatrix = pd.read_csv(fileNames['hiddenCsvFileName'], index_col=0, na_values=['NA']).fillna(0).replace(-1, 0)
         self.observedMatrix = pd.read_csv(fileNames['observedCsvFileName'], index_col=0, na_values=['NA']).fillna(0).replace(-1, 0)
         self.courseMatrix = pd.read_csv(fileNames['courseListCsvFileName'], index_col=0, na_values=['NA']).fillna(0).drop(columns=['KR', 'insanb']).replace(-1, 0)
-        self.courseMatrix = self.courseMatrix
         self.hiddenTags = list(self.hiddenMatrix.columns)
-        self.availableCourses = list(self.observedMatrix.columns)
+        self.availableCourses = list(pd.read_csv(fileNames['availableInTestPeriodFileName']).values.flatten())
 
     def getEntropyDifference(self, probVal: float, destination: str, matrixName: str) -> float:
         if self.viterbiOff:
@@ -55,6 +54,9 @@ class MarkovModel:
                 destinationTagList.append(tag)
                 destinationWeightList.append(self.courseMatrix[tag][destination])
 
+        if not (destinationTagList and sourceTagList):
+             return 0
+
         for i in range(destinationTagList.__len__()):
             transDict[destinationTagList[i]] = (0, 0, destinationWeightList[i])
             for ts in sourceTagList:
@@ -85,7 +87,8 @@ class MarkovModel:
                 transitionValue[0] += self.valueTransition(prev, target)
                 transitionValue[1] += 1
 
-            recList.append([target, transitionValue[0]/transitionValue[1]])
+            if target in self.availableCourses:
+                recList.append([target, transitionValue[0]/transitionValue[1]])
 
         recList.sort(key=lambda x: x[1], reverse=True)
         return recList
@@ -93,11 +96,12 @@ class MarkovModel:
 
 if __name__ == "__main__":
     MM = MarkovModel(
-    {'courseListCsvFileName': 'data/courseList.csv',
-     'hiddenCsvFileName': 'data/hidden.csv',
-     'observedCsvFileName': 'data/observed.csv',
-     'testStudentsJsonFileName': 'data/testStudents.json',
-     'trainStudentsJsonFileName': 'data/trainStudents.json'})
+        {'availableInTestPeriodFileName': 'data/testAvailableCourses.csv',
+         'courseListCsvFileName': 'data/courseList.csv',
+         'hiddenCsvFileName': 'data/hidden.csv',
+         'observedCsvFileName': 'data/observed.csv',
+         'testStudentsJsonFileName': 'data/testStudents.json',
+         'trainStudentsJsonFileName': 'data/trainStudents.json'})
 
     fList = MM.createRecommendation(['152115016 VERİ TABANI YÖNETİM SİSTEMLERİ',
                                    '152115018 VERİ TABANI YÖNETİM SİSTEMLERİ LAB.',

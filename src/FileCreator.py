@@ -11,21 +11,24 @@ class FileCreator:
         self.courseListCsvFileName = "data/courseList.csv"
         self.trainStudentsJsonFileName = "data/trainStudents.json"
         self.testStudentsJsonFileName = "data/testStudents.json"
+        self.availableInTestPeriodFileName = "data/testAvailableCourses.csv"
 
     def getFileNames(self) -> dict:
         return {"hiddenCsvFileName": self.hiddenCsvFileName,
                 "observedCsvFileName": self.observedCsvFileName,
                 "courseListCsvFileName": self.courseListCsvFileName,
                 "trainStudentsJsonFileName": self.trainStudentsJsonFileName,
-                "testStudentsJsonFileName": self.testStudentsJsonFileName}
+                "testStudentsJsonFileName": self.testStudentsJsonFileName,
+                "availableInTestPeriodFileName": self.availableInTestPeriodFileName}
 
     def createFilesFrom(self, brmOgrDersFileName: str, brmDersFileName: str, testPeriod: (int, int)):
-        courseNameCreditDict, courseNameCreditDictElective = self.getCourseList(brmDersFileName)
+        courseNameCreditDict, courseNameCreditDictElective = self.getCourseList(brmDersFileName, testPeriod)
         train = self.getStudentsObjects(brmOgrDersFileName, testPeriod, courseNameCreditDict)
         self.createMatrixes(train, courseNameCreditDict, courseNameCreditDictElective)
 
-    def getCourseList(self, brmDersFileName: str) -> (dict, dict):
+    def getCourseList(self, brmDersFileName: str, testPeriod: (int, int)) -> (dict, dict):
         excel_data = pd.read_excel(brmDersFileName, dtype=str).fillna("0")
+        testCourseNames = []
         courseList_dict = {}
         electiveCourseList_dict = {}
         with open(self.courseListCsvFileName, mode="w", newline="", encoding='utf-8-sig') as dosya:
@@ -57,8 +60,18 @@ class FileCreator:
                                 'meslek': row['MESLEK'],
                                 'tas': row['TASARIM']
                             }
+                if lesson_code + " " + row['DERSADI'] not in testCourseNames:
+                    if row['KR'] != "0" and row['INSANB'] == "0" and "S&D" not in row['DERSADI'] and "ENGINEERING RESEARCH ON" not in row['DERSADI']:
+                        if courseList_dict[lesson_code]['zor_sec'] != "0":
+                            if (int(row['ACILDIGI_YIL']), int(row['ACILDIGI_DONEM'])) == testPeriod:
+                                testCourseNames.append(lesson_code + " " + row['DERSADI'])
 
             dosya.close()
+        with open(self.availableInTestPeriodFileName, mode="w", newline="", encoding='utf-8-sig') as f:
+            csvw = csv.writer(f)
+            for c in testCourseNames:
+                csvw.writerow([c])
+
         return courseList_dict, electiveCourseList_dict  # return courseList as a dictionary
 
     def getStudentsObjects(self, brmOgrDersFileName: str, testPeriod: (int, int), courseNameCreditDict: dict) -> Students:
