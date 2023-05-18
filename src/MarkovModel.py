@@ -2,7 +2,7 @@ import pandas as pd
 import math
 
 class MarkovModel:
-    def __init__(self, fileNames: dict, _viterbiOff = False, _hiddenOff = False):
+    def __init__(self, fileNames: dict, _viterbiOff = 0, _hiddenOff = 0):
         self.viterbiOff = _viterbiOff
         self.hiddenOff = _hiddenOff
 

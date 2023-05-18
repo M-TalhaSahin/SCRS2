@@ -43,13 +43,13 @@ class Students:
 
         jsonDict["students"] = studentList.copy()
 
-        with open(fileName, 'w') as f:
-            json.dump(jsonDict, f, indent=4, ensure_ascii = False)
+        with open(fileName, 'w', encoding='utf8') as f:
+            json.dump(jsonDict, f, indent=4, ensure_ascii=False)
 
     @classmethod
     def loadFromJson(cls, fileName: str):
 
-        with open(fileName, 'r') as f:
+        with open(fileName, 'r', encoding='utf8') as f:
             jsonDict = json.load(f)
 
         students = cls()
@@ -82,8 +82,10 @@ class Student:
                 break
             for i in range(self.semesterDict[key].course_grade_list.__len__()):
                 sumOfP += self.semesterDict[key].course_grade_list[i][1] * self.semesterDict[key].course_grade_list[i][2]
-                count += 1
-        return (sumOfP/count) if not count else -1
+                count += self.semesterDict[key].course_grade_list[i][2]
+        if count == 0:
+            return -1
+        return (sumOfP/count)
 
 
 class Semester:

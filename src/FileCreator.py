@@ -128,7 +128,10 @@ class FileCreator:
                                 s1 = sTrain.studentsDict[keyStu].semesterDict[key].course_grade_list[i][0]
                                 s2 = sTrain.studentsDict[keyStu].semesterDict[nextKey].course_grade_list[j][0]
                                 if s1 in cn and s2 in ecn:
+                                    #gpa = sTrain.studentsDict[keyStu].calculateGpaBeforePeriod(nextKey)
                                     pass_val = FileCreator.isSuccessStatic(sTrain.studentsDict[keyStu].semesterDict[nextKey].course_grade_list[j][1])
+
+                                    #pass_val = FileCreator.isSuccessDynamic(gpa, sTrain.studentsDict[keyStu].semesterDict[nextKey].course_grade_list[j][1])
                                     passesMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += int(pass_val)
                                     countMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += 1
 
@@ -208,6 +211,19 @@ class FileCreator:
             return 1
         else:
             return 0
+
+    @staticmethod
+    def isSuccessDynamic(gpa, grade):
+        if gpa >= 2:
+            if grade >= 1:
+                return 1
+            else:
+                return 0
+        else:
+            if grade >= 2:
+                return 1
+            else:
+                return 0
 
     @staticmethod
     def normalizeMx(mx):
