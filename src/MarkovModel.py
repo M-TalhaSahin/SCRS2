@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 
+
 class MarkovModel:
     def __init__(self, fileNames: dict, _viterbiOff = False, _hiddenOff = False):
         self.viterbiOff = _viterbiOff
@@ -88,7 +89,7 @@ class MarkovModel:
                 transitionValue[1] += 1
 
             if target in self.availableCourses:
-                recList.append([target, transitionValue[0]/transitionValue[1]])
+                recList.append([target, float(transitionValue[0]/transitionValue[1])])
 
         recList.sort(key=lambda x: x[1], reverse=True)
         return recList

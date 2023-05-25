@@ -1,5 +1,6 @@
 import json
 
+
 class Students:
     def __init__(self):
         self.studentsDict = {}
