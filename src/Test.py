@@ -1,4 +1,5 @@
 import pprint
+import json
 
 from matplotlib import pyplot as plt
 
@@ -18,24 +19,39 @@ class Test:
         self.predList = []
         self.realList = []
         self.cutNumber = 3
+        self.passGrade = 3.5
+        self.testDictToPrint = {}
 
     def executeTest(self):
-        TSID = self.testStudents.studentsDict.keys()
-        for s in TSID:
-            p = self.testStudents.studentsDict[s].semesterDict[list(self.testStudents.studentsDict[s].semesterDict.keys())[0]].period
-            prevp = self.prevPeriod(p)
-            if prevp not in list(self.trainStudents.studentsDict[s].semesterDict.keys()):
-                continue
+        with open("predInfo" + self.passGrade.__str__() + ".txt", 'w', encoding='utf8') as f:
+            TSID = self.testStudents.studentsDict.keys()
+            count = 0
+            for s in TSID:
+                p = self.testStudents.studentsDict[s].semesterDict[list(self.testStudents.studentsDict[s].semesterDict.keys())[0]].period
+                prevp = self.prevPeriod(p)
+                if prevp not in list(self.trainStudents.studentsDict[s].semesterDict.keys()):
+                    continue
 
-            realValues = []
-            for k in self.testStudents.studentsDict[s].semesterDict[p].course_grade_list:
-                if self.courseMatrix['zor_sec'][k[0]]:
-                    realValues.append(k)
+                realValues = []
+                for k in self.testStudents.studentsDict[s].semesterDict[p].course_grade_list:
+                    if self.courseMatrix['zor_sec'][k[0]]:
+                        realValues.append(k)
+
+                previousValues = self.trainStudents.studentsDict[s].semesterDict[prevp].course_grade_list
+                predValues = self.MM.createRecommendation(self.toRawList(previousValues))
+
+                self.testDictToPrint[s] = predValues
+
+                f.write(s + ": " + self.testDictToPrint[s].__str__() + "\n")
+                self.setValue(realValues, predValues, self.trainStudents.studentsDict[s].calculateGpaBeforePeriod(p))
+                print(f'{count}/305')
+                count += 1
 
             previousValues = self.trainStudents.studentsDict[s].semesterDict[prevp].course_grade_list
             predValues = self.MM.createRecommendation(self.toRawList(previousValues))
             self.setValue(realValues, predValues)
             print(1)
+
 
     def setValue(self, real, pred):
         if not real: return

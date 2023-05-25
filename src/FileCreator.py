@@ -12,6 +12,8 @@ class FileCreator:
         self.trainStudentsJsonFileName = "data/trainStudents.json"
         self.testStudentsJsonFileName = "data/testStudents.json"
         self.availableInTestPeriodFileName = "data/testAvailableCourses.csv"
+        self.createdTagsFileName = "data/createdTags.csv"
+        self.extraTags = 0
 
     def getFileNames(self) -> dict:
         return {"hiddenCsvFileName": self.hiddenCsvFileName,
@@ -21,19 +23,24 @@ class FileCreator:
                 "testStudentsJsonFileName": self.testStudentsJsonFileName,
                 "availableInTestPeriodFileName": self.availableInTestPeriodFileName}
 
-    def createFilesFrom(self, brmOgrDersFileName: str, brmDersFileName: str, testPeriod: (int, int)):
-        courseNameCreditDict, courseNameCreditDictElective = self.getCourseList(brmDersFileName, testPeriod)
+    def createFilesFrom(self, brmOgrDersFileName: str, brmDersFileName: str, testPeriod: (int, int), createdTagsFileName: str):
+        courseNameCreditDict, courseNameCreditDictElective = self.getCourseList(brmDersFileName, createdTagsFileName, testPeriod)
         train = self.getStudentsObjects(brmOgrDersFileName, testPeriod, courseNameCreditDict)
         self.createMatrixes(train, courseNameCreditDict, courseNameCreditDictElective)
 
-    def getCourseList(self, brmDersFileName: str, testPeriod: (int, int)) -> (dict, dict):
+    def getCourseList(self, brmDersFileName: str, createdTagsFileName: str, testPeriod: (int, int)) -> (dict, dict):
         excel_data = pd.read_excel(brmDersFileName, dtype=str).fillna("0")
+        createdTagList =  pd.read_csv(createdTagsFileName, index_col=0, na_values=['NA'], encoding='utf-8-sig').fillna(0)
+        #print(createdTagList['algorithms']['152111001 CALCULUS I'])
         testCourseNames = []
         courseList_dict = {}
         electiveCourseList_dict = {}
         with open(self.courseListCsvFileName, mode="w", newline="", encoding='utf-8-sig') as dosya:
             yazici = csv.writer(dosya)
-            yazici.writerow(['COURSENAME', 'KR', 'zor_sec', 'tembil', 'meslek', 'insanb', 'tas'])
+            yazici.writerow(['COURSENAME', 'KR', 'zor_sec', 'tembil', 'meslek', 'insanb', 'tas', 'algorithms','dataStructures',
+                             'artificialIntelligence',"machineLearning","computerNetworks","databases","operatingSystems","softwareEngineering",
+                             "computerGraphics","cybersecurity","humanComputerInteraction","webDevelopment","programmingLanguages","computerVision",
+                             "naturalLanguageProcessing","hardwareDesign"])
 
             for index, row in excel_data.iterrows():
                 lesson_code = row['DERS_KODU']
@@ -48,9 +55,18 @@ class FileCreator:
                             'meslek': row['MESLEK'],
                             'tas': row['TASARIM']
                         }
-                        yazici.writerow(
-                            [lesson_code + " " + row['DERSADI'], row['KR'], row['ZORSEC'], row['TEMBIL'], row['MESLEK'],
-                             row['INSANB'], row['TASARIM']])
+
+                        for column in createdTagList.columns:
+                            info = float(createdTagList[column][lesson_code + " " + row['DERSADI']]) * self.extraTags
+                            courseList_dict[lesson_code][column] = info
+
+                        courseList_dict[lesson_code] = self.normalizeCourseDict(courseList_dict[lesson_code])
+                        rowtowrite = [lesson_code + " " + row['DERSADI']]
+                        for column in list(courseList_dict[lesson_code].keys())[1:]:
+                            info = float(courseList_dict[lesson_code][column])
+                            rowtowrite.append(info)
+                        yazici.writerow(rowtowrite)
+
                         if courseList_dict[lesson_code]['zor_sec'] != "0":
                             electiveCourseList_dict[lesson_code] = {
                                 'ders_adi': row['DERSADI'],
@@ -60,6 +76,10 @@ class FileCreator:
                                 'meslek': row['MESLEK'],
                                 'tas': row['TASARIM']
                             }
+                            for column in createdTagList.columns:
+                                electiveCourseList_dict[lesson_code][column] = float(createdTagList[column][lesson_code + " " + row['DERSADI']]) * self.extraTags
+                            electiveCourseList_dict[lesson_code] = self.normalizeCourseDict(electiveCourseList_dict[lesson_code])
+
                 if lesson_code + " " + row['DERSADI'] not in testCourseNames:
                     if row['KR'] != "0" and row['INSANB'] == "0" and "S&D" not in row['DERSADI'] and "ENGINEERING RESEARCH ON" not in row['DERSADI']:
                         if courseList_dict[lesson_code]['zor_sec'] != "0":
@@ -108,13 +128,18 @@ class FileCreator:
             ecn.append(k + " " + electiveCourseNamesDict[k]['ders_adi'])
             index += 1
 
-        hiddenIndex = {'zor_sec': 0, 'tembil': 1, 'meslek': 2, 'tas': 3}
+        hiddenIndex = {'tembil': 0, 'meslek': 1, 'tas': 2, 'algorithms': 3,
+                       'dataStructures':4, 'artificialIntelligence':5, 'machineLearning':6,
+                       'computerNetworks':7, 'databases':8, 'operatingSystems':9,
+                       'softwareEngineering':10, 'computerGraphics':11, 'cybersecurity':12,
+                       'humanComputerInteraction':13, 'webDevelopment':14, 'programmingLanguages':15,
+                       'computerVision':16, 'naturalLanguageProcessing':17, 'hardwareDesign':18}
 
         passesMx = np.zeros((x, y))
         countMx = np.zeros((x, y))
 
-        titleMx = np.zeros((4, 4))  # title size
-        countHiddenMx = np.zeros((4, 4))  # title counter
+        titleMx = np.zeros((19, 19))  # title size
+        countHiddenMx = np.zeros((19, 19))  # title counter
 
         for keyStu in sTrain.studentsDict.keys():
             keys = sTrain.studentsDict[keyStu].semesterDict.keys()
@@ -132,39 +157,33 @@ class FileCreator:
                                     passesMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += int(pass_val)
                                     countMx[all_courses_index_dict[s1]][elective_courses_index_dict[s2]] += 1
 
-
                                     s1Title = {}
                                     s2Title = {}
 
-                                    s1Title["zor_sec"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['zor_sec']) else 0
-                                    s1Title["tembil"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tembil']) else 0
-                                    s1Title["meslek"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['meslek']) else 0
-                                    s1Title["tas"] = 1 if 0 != int(courseNamesDict[s1.split(' ')[0]]['tas']) else 0
+                                    for ckey in list(courseNamesDict[s1.split(' ')[0]].keys())[3:]:
+                                        s1Title[ckey] = 1 if 0 != float(courseNamesDict[s1.split(' ')[0]][ckey]) else 0
 
                                     kr = int(courseNamesDict[s2.split(' ')[0]]['kr'])
-                                    s2Title["zor_sec"] = courseNamesDict[s2.split(' ')[0]]['zor_sec']
-                                    s2Title["tembil"] = courseNamesDict[s2.split(' ')[0]]['tembil']
-                                    s2Title["meslek"] = courseNamesDict[s2.split(' ')[0]]['meslek']
-                                    s2Title["tas"] = courseNamesDict[s2.split(' ')[0]]['tas']
 
-                                    singlePoint = kr / (int(s2Title["zor_sec"]) + int(s2Title["tembil"]) + int(s2Title["meslek"]) + int(s2Title["tas"]))
+                                    top = 0
+                                    for ckey in list(courseNamesDict[s1.split(' ')[0]].keys())[3:]:
+                                        s2Title[ckey] = courseNamesDict[s2.split(' ')[0]][ckey]
+                                        top += s2Title[ckey]
 
+                                    singlePoint = (kr / top if top else 0)
+                                    # edit singlepoint for created and default tags
                                     for f1 in s1Title.keys():
                                         for f2 in s2Title.keys():
-                                            if int(s1Title[f1]) != 0 and int(s2Title[f2]) != 0:
-                                                val = singlePoint * int(s2Title[f2])
+                                            if s1Title[f1] != 0 and s2Title[f2] != 0:
+                                                val = singlePoint * s2Title[f2]
                                                 titleMx[hiddenIndex[f1]][hiddenIndex[f2]] += val*pass_val
                                                 countHiddenMx[hiddenIndex[f1]][hiddenIndex[f2]] += 1
-
-
-
-
                                     #courseNamesDict[s1.split(' ')[0]][k]
                     nextKey = FileCreator.next2Period(key)
 
         print(1)
         finalMx = np.zeros((x, y))
-        finalHiddenMx = np.zeros((4, 4))
+        finalHiddenMx = np.zeros((19, 19))
 
         for i in range(x):
             for j in range(y):
@@ -173,8 +192,8 @@ class FileCreator:
                 else:
                     finalMx[i][j] = passesMx[i][j] / countMx[i][j]
 
-        for i in range(4):
-            for j in range(4):
+        for i in range(19):
+            for j in range(19):
                 if countHiddenMx[i][j] == 0:
                     finalHiddenMx[i][j] = -1
                 else:
@@ -231,9 +250,25 @@ class FileCreator:
             mx[i] = temp
         return mx
 
+    @staticmethod
+    def normalizeCourseDict(courseDict):
+        base = list(courseDict.keys())[3:6]
+        created = list(courseDict.keys())[6:]
+        sumofval = 0
+        for key in base:
+            sumofval += float(courseDict[key])
+        for key in base:
+            courseDict[key] = ((float(courseDict[key]) / sumofval) if sumofval else 0)
+        sumofval = 0
+        for key in created:
+            sumofval += float(courseDict[key])
+        for key in created:
+            courseDict[key] = ((float(courseDict[key]) / sumofval) if sumofval else 0)
+        return courseDict
+
 
 if __name__ == "__main__":
     import pprint
     FC = FileCreator()
-    FC.createFilesFrom("resources/BrmOgrDers.xls", "resources/BrmDers.xls", (2018, 2))
+    FC.createFilesFrom("resources/BrmOgrDers.xls", "resources/BrmDers.xls", (2018, 2), "resources/x.csv")
     pprint.pprint(FC.getFileNames())
