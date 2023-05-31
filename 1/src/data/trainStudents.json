@@ -1,0 +1,333 @@
+{
+    "students": [
+        {
+            "studentId": "2305286815",
+            "semesters": [
+                {
+                    "year": 2010,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111001 CALCULUS I",
+                            "credit": 4,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152113004 DIFFERENTIAL EQUATIONS",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152113005 DIGITAL SYSTEMS I",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152114003 DISCRETE COMPUTATIONAL STRUCTURES",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152115001 ADVANCED PROGRAMMING",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152115004 INTRODUCTION TO MICROCOMPUTER",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152115005 PROBABILITY",
+                            "credit": 3,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2010,
+                    "period": 2,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152114004 FUNDAMENTALS OF ELECTRONICS",
+                            "credit": 3,
+                            "grade": 1.5
+                        },
+                        {
+                            "courseName": "152116002 INTRODUCTION TO OPERATING SYSTEMS",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152116003 ALGORITHMS AND COMPLEXITY",
+                            "credit": 3,
+                            "grade": 1.0
+                        },
+                        {
+                            "courseName": "152116005 COMPUTER ARCHITECTURE",
+                            "credit": 3,
+                            "grade": 1.5
+                        },
+                        {
+                            "courseName": "152118001 PARALLEL PROGRAMMING",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152118005 COMPUTER NETWORKS",
+                            "credit": 3,
+                            "grade": 3.0
+                        },
+                        {
+                            "courseName": "152118030 WEB BASED TECHNOLOGIES",
+                            "credit": 3,
+                            "grade": 3.5
+                        }
+                    ]
+                },
+                {
+                    "year": 2011,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152113015 NUMERICAL METHODS",
+                            "credit": 3,
+                            "grade": 1.0
+                        },
+                        {
+                            "courseName": "152114003 DISCRETE COMPUTATIONAL STRUCTURES",
+                            "credit": 3,
+                            "grade": 4.0
+                        },
+                        {
+                            "courseName": "152117001 ADVANCED COMPUTER ARCHITECTURE",
+                            "credit": 3,
+                            "grade": 3.5
+                        },
+                        {
+                            "courseName": "152117003 DATA SECURITY",
+                            "credit": 3,
+                            "grade": 1.5
+                        },
+                        {
+                            "courseName": "152117005 IMAGE PROCESSING",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152117102 INTRODUCTION TO ARTIFICIAL INTELLIGENCE",
+                            "credit": 3,
+                            "grade": 2.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2011,
+                    "period": 2,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152118007 SOFTWARE ENGINEERING",
+                            "credit": 3,
+                            "grade": 4.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "studentId": "1122236014",
+            "semesters": [
+                {
+                    "year": 2010,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111001 CALCULUS I",
+                            "credit": 4,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152113001 COMPUTER PROGRAMMING II",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152113004 DIFFERENTIAL EQUATIONS",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152113005 DIGITAL SYSTEMS I",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152114003 DISCRETE COMPUTATIONAL STRUCTURES",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152115005 PROBABILITY",
+                            "credit": 3,
+                            "grade": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "studentId": "4158392861",
+            "semesters": [
+                {
+                    "year": 2010,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111001 CALCULUS I",
+                            "credit": 4,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111002 INTRODUCTION TO COMPUTERS",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111005 PHYSICS I",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111006 PHYSICS I LAB",
+                            "credit": 1,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111007 CHEMISTRY",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111010 INTRODUCTION TO PROGRAMMING",
+                            "credit": 2,
+                            "grade": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "studentId": "4286364408",
+            "semesters": [
+                {
+                    "year": 2010,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111001 CALCULUS I",
+                            "credit": 4,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111002 INTRODUCTION TO COMPUTERS",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111005 PHYSICS I",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111007 CHEMISTRY",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111008 CHEMISTRY LAB.",
+                            "credit": 1,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111010 INTRODUCTION TO PROGRAMMING",
+                            "credit": 2,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2010,
+                    "period": 2,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152112009 LINEAR ALGEBRA",
+                            "credit": 3,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2011,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111002 INTRODUCTION TO COMPUTERS",
+                            "credit": 3,
+                            "grade": 2.0
+                        },
+                        {
+                            "courseName": "152111010 INTRODUCTION TO PROGRAMMING",
+                            "credit": 2,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2011,
+                    "period": 2,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152112009 LINEAR ALGEBRA",
+                            "credit": 3,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2012,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111005 PHYSICS I",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111010 INTRODUCTION TO PROGRAMMING",
+                            "credit": 2,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2013,
+                    "period": 1,
+                    "courseGradeList": [
+                        {
+                            "courseName": "152111005 PHYSICS I",
+                            "credit": 3,
+                            "grade": 0.0
+                        },
+                        {
+                            "courseName": "152111010 INTRODUCTION TO PROGRAMMING",
+                            "credit": 2,
+                            "grade": 0.0
+                        }
+                    ]
+                },
+                {
+                    "year": 2014,
+                    "period": 2,
+                    "courseGradeList": [
+                        {
+                            "courseName": 
